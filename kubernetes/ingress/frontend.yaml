@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    ingress.kubernetes.io/protocol: https
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/service.serversscheme: https
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  #  traefik.ingress.kubernetes.io/router.middlewares: lab-julianschmidt-testipwhitelist@kubernetescrd
+  name: frontend
+spec:
+  rules:
+    - host: frontend.lab-julianschmidt.development.az.nxsas.com
+      http:
+        paths:
+          - backend:
+              serviceName: frontend
+              servicePort: 443
+            path: /
+  tls:
+    - hosts:
+        - frontend.lab-julianschmidt.development.az.nxsas.com
+      secretName: frontend-ingress
